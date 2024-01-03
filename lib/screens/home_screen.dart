@@ -1,8 +1,10 @@
+import 'package:enforcenow_admin/services/add_user.dart';
 import 'package:enforcenow_admin/widgets/button_widget.dart';
 import 'package:enforcenow_admin/widgets/drawer_widget.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
 import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,105 +25,167 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: 400,
-              width: 275,
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                addAccount(context, true);
-              },
-              child: Container(
-                height: 175,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 400,
+                  width: 275,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
                   children: [
-                    const Icon(
-                      Icons.account_circle,
-                      size: 100,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            addAccount(context, 'Admin');
+                          },
+                          child: Container(
+                            height: 175,
+                            width: 175,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.account_circle,
+                                  size: 100,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextBold(
+                                  text: 'Add Admin Account',
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            addAccount(context, 'Enforcer');
+                          },
+                          child: Container(
+                            height: 175,
+                            width: 175,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.person_4_sharp,
+                                  size: 100,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextBold(
+                                  text: 'Add Enforcer Account',
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 50,
                     ),
-                    TextBold(
-                      text: 'Add Admin Account',
-                      fontSize: 14,
-                      color: Colors.black,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            addAccount(context, 'Cashier');
+                          },
+                          child: Container(
+                            height: 175,
+                            width: 175,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.face,
+                                  size: 100,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextBold(
+                                  text: 'Add Cashier Account',
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Container(
+                          height: 175,
+                          width: 175,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.book,
+                                size: 100,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextBold(
+                                text: 'User Manual',
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                addAccount(context, false);
-              },
-              child: Container(
-                height: 175,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.person_4_sharp,
-                      size: 100,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextBold(
-                      text: 'Add Enforcer Account',
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: 175,
-              width: 175,
-              decoration: BoxDecoration(
-                color: Colors.grey[400],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.book,
-                    size: 100,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextBold(
-                    text: 'User Manual',
-                    fontSize: 14,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
+              ],
             ),
           ],
         ),
@@ -139,7 +203,7 @@ class HomeScreen extends StatelessWidget {
 
   final passwordController = TextEditingController();
 
-  addAccount(context, bool isAdmin) {
+  addAccount(context, String type) {
     showDialog(
       context: context,
       builder: (context) {
@@ -194,8 +258,7 @@ class HomeScreen extends StatelessWidget {
                 radius: 100,
                 label: 'Continue',
                 onPressed: () {
-                  showToast('Account added succesfully!');
-                  Navigator.pop(context);
+                  register(context, type);
                 },
               ),
             ],
@@ -203,5 +266,33 @@ class HomeScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  register(context, type) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
+      // signup(nameController.text, numberController.text, addressController.text,
+      //     emailController.text);
+
+      addUser(type, nameController.text, numberController.text,
+          addressController.text, emailController.text);
+
+      showToast('Account added succesfully!');
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showToast('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showToast('The account already exists for that email.');
+      } else if (e.code == 'invalid-email') {
+        showToast('The email address is not valid.');
+      } else {
+        showToast(e.toString());
+      }
+    } on Exception catch (e) {
+      showToast("An error occurred: $e");
+    }
   }
 }
