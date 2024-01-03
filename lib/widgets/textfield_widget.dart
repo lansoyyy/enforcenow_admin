@@ -12,6 +12,7 @@ class TextFieldWidget extends StatefulWidget {
   final TextInputType? inputType;
   final bool? isPassword;
   final bool? isEmail;
+  final Color? textcolor;
 
   TextFieldWidget(
       {super.key,
@@ -20,6 +21,7 @@ class TextFieldWidget extends StatefulWidget {
       required this.controller,
       this.isObscure = false,
       this.width = 300,
+      this.textcolor = Colors.white,
       this.height = 40,
       this.maxLine = 1,
       this.isPassword = false,
@@ -36,7 +38,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextRegular(text: widget.label, fontSize: 12, color: Colors.white),
+        TextRegular(text: widget.label, fontSize: 12, color: widget.textcolor!),
         const SizedBox(
           height: 5,
         ),

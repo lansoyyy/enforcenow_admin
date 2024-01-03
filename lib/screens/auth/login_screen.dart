@@ -1,3 +1,4 @@
+import 'package:enforcenow_admin/screens/home_screen.dart';
 import 'package:enforcenow_admin/widgets/button_widget.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
 import 'package:enforcenow_admin/widgets/textfield_widget.dart';
@@ -78,7 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.white,
                   width: 300,
                   label: 'Login',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  },
                 ),
               ],
             ),
