@@ -1,4 +1,5 @@
 import 'package:enforcenow_admin/screens/auth/login_screen.dart';
+import 'package:enforcenow_admin/screens/cashier_home_screen.dart';
 import 'package:enforcenow_admin/screens/home_screen.dart';
 import 'package:enforcenow_admin/widgets/button_widget.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
@@ -81,8 +82,8 @@ class _CashierLoginScreenState extends State<CashierLoginScreen> {
                   width: 300,
                   label: 'Login',
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const CashierHomeScreen()));
                   },
                 ),
                 const SizedBox(
