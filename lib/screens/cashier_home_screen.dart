@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow_admin/screens/auth/cashier_login_screen.dart';
+import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../../widgets/text_widget.dart';
 
 class CashierHomeScreen extends StatefulWidget {
@@ -124,188 +127,155 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                 height: 500,
                 child: TabBarView(
                   children: [
-                    SingleChildScrollView(
-                      child: DataTable(
-                        columns: [
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'ID',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Name',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'License',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Is Paid',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Date and Time',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: '', fontSize: 18, color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: '', fontSize: 18, color: Colors.black)),
-                        ],
-                        rows: [
-                          for (int i = 0; i < 50; i++)
-                            DataRow(cells: [
-                              DataCell(
-                                TextRegular(
-                                  text: '${i + 1}',
-                                  fontSize: 14,
+                    for (int i = 0; i < 2; i++)
+                      StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Records')
+                              .where('isPaid', isEqualTo: i == 0 ? true : false)
+                              .where('name',
+                                  isGreaterThanOrEqualTo:
+                                      toBeginningOfSentenceCase(nameSearched))
+                              .where('name',
+                                  isLessThan:
+                                      '${toBeginningOfSentenceCase(nameSearched)}z')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
                                   color: Colors.black,
-                                ),
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return SingleChildScrollView(
+                              child: DataTable(
+                                columns: [
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'ID',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'Name',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'License',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'Is Paid',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'Date and Time',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: '',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: '',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                ],
+                                rows: [
+                                  for (int i = 0; i < data.docs.length; i++)
+                                    DataRow(cells: [
+                                      DataCell(
+                                        TextRegular(
+                                          text: '${i + 1}',
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['name'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: data.docs[i]['license'],
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text:
+                                              data.docs[i]['isPaid'].toString(),
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
+                                          text: DateFormat.yMMMd()
+                                              .add_jm()
+                                              .format(data.docs[i]['dateTime']
+                                                  .toDate()),
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(IconButton(
+                                        onPressed: () async {
+                                          if (data.docs[i]['isPaid']) {
+                                            await FirebaseFirestore.instance
+                                                .collection('Records')
+                                                .doc(data.docs[i].id)
+                                                .update({'isPaid': false});
+                                          } else {
+                                            await FirebaseFirestore.instance
+                                                .collection('Records')
+                                                .doc(data.docs[i].id)
+                                                .update({'isPaid': true});
+                                          }
+                                        },
+                                        icon: const Icon(
+                                          Icons.check_box_outline_blank,
+                                          color: Colors.blue,
+                                        ),
+                                      )),
+                                      DataCell(IconButton(
+                                        onPressed: () async {
+                                          await FirebaseFirestore.instance
+                                              .collection('Records')
+                                              .doc(data.docs[i].id)
+                                              .delete();
+                                          showToast(
+                                              'Violation deleted succesfully!');
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      )),
+                                    ]),
+                                ],
                               ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'John Doe',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: '123456qwerty',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'TRUE',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'January 01, 2024 - 4:00pm',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.check_box,
-                                  color: Colors.blue,
-                                ),
-                              )),
-                              DataCell(IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                              )),
-                            ]),
-                        ],
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      child: DataTable(
-                        columns: [
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'ID',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Name',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'License',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Is Paid',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: 'Date and Time',
-                                  fontSize: 18,
-                                  color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: '', fontSize: 18, color: Colors.black)),
-                          DataColumn(
-                              label: TextBold(
-                                  text: '', fontSize: 18, color: Colors.black)),
-                        ],
-                        rows: [
-                          for (int i = 0; i < 50; i++)
-                            DataRow(cells: [
-                              DataCell(
-                                TextRegular(
-                                  text: '${i + 1}',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'John Doe',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: '123456qwerty',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'FALSE',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(
-                                TextRegular(
-                                  text: 'January 01, 2024 - 4:00pm',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              DataCell(IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.check_box_outline_blank,
-                                  color: Colors.blue,
-                                ),
-                              )),
-                              DataCell(IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ),
-                              )),
-                            ]),
-                        ],
-                      ),
-                    ),
+                            );
+                          }),
                   ],
                 ),
               ),
