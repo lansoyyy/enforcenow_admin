@@ -2,6 +2,7 @@ import 'package:enforcenow_admin/widgets/button_widget.dart';
 import 'package:enforcenow_admin/widgets/drawer_widget.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
 import 'package:enforcenow_admin/widgets/textfield_widget.dart';
+import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -193,6 +194,7 @@ class HomeScreen extends StatelessWidget {
                 radius: 100,
                 label: 'Continue',
                 onPressed: () {
+                  showToast('Account added succesfully!');
                   Navigator.pop(context);
                 },
               ),
