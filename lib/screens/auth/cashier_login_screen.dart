@@ -1,18 +1,18 @@
-import 'package:enforcenow_admin/screens/auth/cashier_login_screen.dart';
+import 'package:enforcenow_admin/screens/auth/login_screen.dart';
 import 'package:enforcenow_admin/screens/home_screen.dart';
 import 'package:enforcenow_admin/widgets/button_widget.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
 import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class CashierLoginScreen extends StatefulWidget {
+  const CashierLoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<CashierLoginScreen> createState() => _CashierLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _CashierLoginScreenState extends State<CashierLoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Center(
                   child: TextBold(
-                    text: 'Admin Page',
+                    text: 'Cashier Page',
                     fontSize: 18,
                     color: Colors.white,
                   ),
@@ -95,10 +95,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const CashierLoginScreen()));
+                          builder: (context) => const LoginScreen()));
                     },
                     child: TextBold(
-                      text: 'Continue as Cashier',
+                      text: 'Continue as Admin',
                       fontSize: 14,
                       color: Colors.white,
                     ),
