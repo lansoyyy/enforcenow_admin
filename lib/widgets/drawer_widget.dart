@@ -29,7 +29,7 @@ class _MyDrawerState extends State<DrawerWidget> {
               accountEmail:
                   TextRegular(text: '', fontSize: 12, color: Colors.black),
               accountName: TextRegular(
-                text: 'Admin',
+                text: 'Administrator',
                 fontSize: 14,
                 color: Colors.black,
               ),

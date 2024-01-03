@@ -26,20 +26,42 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50, top: 50),
+              child: TextBold(
+                text: 'Welcome Admin!',
+                fontSize: 32,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(
+                  width: 50,
+                ),
                 Container(
-                  height: 400,
-                  width: 275,
                   decoration: BoxDecoration(
-                    color: Colors.grey[400],
+                    color: Colors.blue[300],
                     borderRadius: BorderRadius.circular(20),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(
+                      'assets/images/police.png',
+                      height: 500,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 50,
                 ),
                 Column(
                   children: [
