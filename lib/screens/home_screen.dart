@@ -292,14 +292,14 @@ class HomeScreen extends StatelessWidget {
 
   register(context, type) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
 
       // signup(nameController.text, numberController.text, addressController.text,
       //     emailController.text);
 
       addUser(type, nameController.text, numberController.text,
-          addressController.text, emailController.text);
+          addressController.text, emailController.text, user.user!.uid);
 
       showToast('Account added succesfully!');
       Navigator.pop(context);
