@@ -1,4 +1,5 @@
 import 'package:enforcenow_admin/screens/home_screen.dart';
+import 'package:enforcenow_admin/screens/pages/reports_page.dart';
 import 'package:enforcenow_admin/screens/pages/user_management_page.dart';
 import 'package:enforcenow_admin/screens/pages/violations_page.dart';
 import 'package:enforcenow_admin/widgets/text_widget.dart';
@@ -76,6 +77,18 @@ class _MyDrawerState extends State<DrawerWidget> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const ViolationsPage()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.report),
+              title: TextBold(
+                text: 'Reports',
+                fontSize: 12,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ReportsPage()));
               },
             ),
             ListTile(
