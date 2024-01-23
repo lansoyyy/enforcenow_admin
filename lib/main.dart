@@ -1,5 +1,7 @@
 import 'package:enforcenow_admin/screens/auth/login_screen.dart';
+import 'package:enforcenow_admin/screens/cashier_home_screen.dart';
 import 'package:enforcenow_admin/screens/home_screen.dart';
+import 'package:enforcenow_admin/screens/pages/add_violation_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +23,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomeScreen(),
+    return const MaterialApp(
+      home: AddViolationScreen(),
     );
   }
 }

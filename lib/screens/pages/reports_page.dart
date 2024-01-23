@@ -5,6 +5,11 @@ import 'package:intl/intl.dart';
 
 import '../../widgets/drawer_widget.dart';
 import '../../widgets/text_widget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'dart:io' as io;
+import 'package:pdf/pdf.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({super.key});
@@ -19,11 +24,37 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.download),
-      ),
-      drawer: const DrawerWidget(),
+      floatingActionButton: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('Records')
+              .where('day', isEqualTo: dates.day)
+              .where('month', isEqualTo: dates.month)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              print(snapshot.error);
+              return const Center(child: Text('Error'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.black,
+                )),
+              );
+            }
+
+            final data = snapshot.requireData;
+            return FloatingActionButton(
+              onPressed: () {
+                generatePdf(data.docs);
+              },
+              child: const Icon(Icons.download),
+            );
+          }),
+      drawer: DrawerWidget(),
       appBar: AppBar(
         title: TextBold(text: 'REPORTS', fontSize: 18, color: Colors.white),
         centerTitle: true,
@@ -147,6 +178,8 @@ class _ReportsPageState extends State<ReportsPage> {
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Records')
+                      .where('day', isEqualTo: dates.day)
+                      .where('month', isEqualTo: dates.month)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -272,6 +305,8 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
+  var dates = DateTime.now();
+
   void dateFromPicker(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
         builder: (context, child) {
@@ -295,10 +330,91 @@ class _ReportsPageState extends State<ReportsPage> {
       String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
 
       setState(() {
+        dates = pickedDate;
         dateController.text = formattedDate;
       });
     } else {
       return null;
     }
+  }
+
+  void generatePdf(List tableDataList) async {
+    final pdf = pw.Document();
+    final tableHeaders = [
+      'Name',
+      'License',
+      'Status',
+      'Date and Time',
+    ];
+
+    String cdate1 = DateFormat("MMMM, dd, yyyy").format(dates);
+
+    List<List<String>> tableData = [];
+    for (var i = 0; i < tableDataList.length; i++) {
+      tableData.add([
+        tableDataList[i]['fname'] + ' ' + tableDataList[i]['lname'],
+        tableDataList[i]['license'],
+        tableDataList[i]['status'],
+        DateFormat.yMMMd()
+            .add_jm()
+            .format(tableDataList[i]['dateTime'].toDate())
+      ]);
+    }
+
+    pdf.addPage(
+      pw.MultiPage(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        pageFormat: PdfPageFormat.letter,
+        orientation: pw.PageOrientation.portrait,
+        build: (context) => [
+          pw.Align(
+            alignment: pw.Alignment.center,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              children: [
+                pw.Text('Enforce Now',
+                    style: const pw.TextStyle(
+                      fontSize: 18,
+                    )),
+                pw.SizedBox(height: 10),
+                pw.Text(
+                  style: const pw.TextStyle(
+                    fontSize: 15,
+                  ),
+                  'List of Reports',
+                ),
+                pw.SizedBox(height: 5),
+                pw.Text(
+                  style: const pw.TextStyle(
+                    fontSize: 10,
+                  ),
+                  cdate1,
+                ),
+              ],
+            ),
+          ),
+          pw.SizedBox(height: 20),
+          pw.Table.fromTextArray(
+            headers: tableHeaders,
+            data: tableData,
+            headerDecoration: const pw.BoxDecoration(),
+            rowDecoration: const pw.BoxDecoration(),
+            headerHeight: 25,
+            cellHeight: 45,
+            cellAlignments: {
+              0: pw.Alignment.centerLeft,
+              1: pw.Alignment.center,
+            },
+          ),
+          pw.SizedBox(height: 20),
+        ],
+      ),
+    );
+
+    await Printing.layoutPdf(onLayout: (format) async => pdf.save());
+
+    final output = await getTemporaryDirectory();
+    final file = io.File("${output.path}/payroll_report.pdf");
+    await file.writeAsBytes(await pdf.save());
   }
 }

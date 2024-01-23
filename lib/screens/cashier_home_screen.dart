@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow_admin/screens/auth/cashier_login_screen.dart';
+import 'package:enforcenow_admin/widgets/drawer_widget.dart';
 import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +25,10 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        drawer: DrawerWidget(
+          incashier: true,
+        ),
         appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Image.asset('assets/images/logo.png'),
-          ),
           title:
               TextBold(text: 'CASHIER HOME', fontSize: 18, color: Colors.white),
           centerTitle: true,

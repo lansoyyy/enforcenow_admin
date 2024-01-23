@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppBar(
         title: TextBold(text: 'HOME ADMIN', fontSize: 18, color: Colors.white),
         centerTitle: true,

@@ -18,7 +18,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppBar(
         title: TextBold(
             text: 'USER MANAGEMENT', fontSize: 18, color: Colors.white),

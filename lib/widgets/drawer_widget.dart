@@ -1,4 +1,6 @@
+import 'package:enforcenow_admin/screens/cashier_home_screen.dart';
 import 'package:enforcenow_admin/screens/home_screen.dart';
+import 'package:enforcenow_admin/screens/pages/add_violation_screen.dart';
 import 'package:enforcenow_admin/screens/pages/reports_page.dart';
 import 'package:enforcenow_admin/screens/pages/user_management_page.dart';
 import 'package:enforcenow_admin/screens/pages/violations_page.dart';
@@ -8,7 +10,9 @@ import 'package:flutter/material.dart';
 import '../screens/auth/login_screen.dart';
 
 class DrawerWidget extends StatefulWidget {
-  const DrawerWidget({Key? key}) : super(key: key);
+  bool incashier;
+
+  DrawerWidget({super.key, this.incashier = false});
 
   @override
   State<DrawerWidget> createState() => _MyDrawerState();
@@ -30,7 +34,7 @@ class _MyDrawerState extends State<DrawerWidget> {
               accountEmail:
                   TextRegular(text: '', fontSize: 12, color: Colors.black),
               accountName: TextRegular(
-                text: 'Administrator',
+                text: widget.incashier ? 'Cashier' : 'Administrator',
                 fontSize: 14,
                 color: Colors.black,
               ),
@@ -51,22 +55,40 @@ class _MyDrawerState extends State<DrawerWidget> {
                 color: Colors.black,
               ),
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                if (widget.incashier) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const CashierHomeScreen()));
+                } else {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                }
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.group),
-              title: TextBold(
-                text: 'User Management',
-                fontSize: 12,
-                color: Colors.black,
-              ),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const UserManagementPage()));
-              },
-            ),
+            widget.incashier
+                ? ListTile(
+                    leading: const Icon(Icons.add),
+                    title: TextBold(
+                      text: 'Add Violation',
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AddViolationScreen()));
+                    },
+                  )
+                : ListTile(
+                    leading: const Icon(Icons.group),
+                    title: TextBold(
+                      text: 'User Management',
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const UserManagementPage()));
+                    },
+                  ),
             ListTile(
               leading: const Icon(Icons.list),
               title: TextBold(
