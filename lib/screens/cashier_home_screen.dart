@@ -28,6 +28,7 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
         //   incashier: true,
         // ),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title:
               TextBold(text: 'CASHIER HOME', fontSize: 18, color: Colors.white),
           centerTitle: true,
