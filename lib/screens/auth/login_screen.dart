@@ -24,7 +24,17 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset('assets/images/admin.png'),
+          Stack(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 250, left: 50),
+              child: Image.asset(
+                'assets/images/1.png',
+                height: 400,
+                width: 400,
+              ),
+            ),
+            Image.asset('assets/images/admin.png')
+          ]),
           SizedBox(
             width: 500,
             height: double.infinity,
@@ -34,10 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 50),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    height: 250,
-                    width: 250,
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        'assets/images/logo.png',
+                        height: 250,
+                        width: 250,
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
