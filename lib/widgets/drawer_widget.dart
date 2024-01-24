@@ -64,31 +64,30 @@ class _MyDrawerState extends State<DrawerWidget> {
                 }
               },
             ),
-            widget.incashier
-                ? ListTile(
-                    leading: const Icon(Icons.add),
-                    title: TextBold(
-                      text: 'Add Violation',
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AddViolationScreen()));
-                    },
-                  )
-                : ListTile(
-                    leading: const Icon(Icons.group),
-                    title: TextBold(
-                      text: 'User Management',
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const UserManagementPage()));
-                    },
-                  ),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: TextBold(
+                text: 'Add Violation',
+                fontSize: 12,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const AddViolationScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.group),
+              title: TextBold(
+                text: 'User Management',
+                fontSize: 12,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const UserManagementPage()));
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.list),
               title: TextBold(

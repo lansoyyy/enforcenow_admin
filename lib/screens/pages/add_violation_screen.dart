@@ -129,6 +129,76 @@ class _AddViolationScreenState extends State<AddViolationScreen> {
                                 color: Colors.amber),
                             IconButton(
                               onPressed: () async {
+                                setState(() {
+                                  name.text = data.docs[index]['name'];
+                                  amount.text = data.docs[index]['amount'];
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: TextBold(
+                                          text: 'Editing Violation',
+                                          fontSize: 18,
+                                          color: Colors.black),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          TextFieldWidget(
+                                              textcolor: Colors.black,
+                                              label: 'Name of Violation',
+                                              controller: name),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextFieldWidget(
+                                              textcolor: Colors.black,
+                                              label: 'Amount',
+                                              controller: amount),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: TextBold(
+                                            text: 'Cancel',
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            await FirebaseFirestore.instance
+                                                .collection('Violations')
+                                                .doc(data.docs[index].id)
+                                                .update({
+                                              'name': name.text,
+                                              'amount': amount.text,
+                                            });
+                                            showToast(
+                                                'Violation updated succesfully!');
+                                            Navigator.pop(context);
+                                          },
+                                          child: TextBold(
+                                            text: 'Continue',
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
                                 await FirebaseFirestore.instance
                                     .collection('Violations')
                                     .doc(data.docs[index].id)

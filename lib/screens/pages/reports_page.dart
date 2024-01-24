@@ -205,6 +205,9 @@ class _ReportsPageState extends State<ReportsPage> {
                                 text: 'ID', fontSize: 18, color: Colors.black)),
                         DataColumn(
                             label: TextBold(
+                                text: '', fontSize: 18, color: Colors.black)),
+                        DataColumn(
+                            label: TextBold(
                                 text: 'Name',
                                 fontSize: 18,
                                 color: Colors.black)),
@@ -240,6 +243,28 @@ class _ReportsPageState extends State<ReportsPage> {
                                 text: '${i + 1}',
                                 fontSize: 14,
                                 color: Colors.black,
+                              ),
+                            ),
+                            DataCell(
+                              IconButton(
+                                onPressed: () {
+                                  if (data.docs[i]['img'] != '') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Image.network(
+                                              data.docs[i]['img']),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    showToast('No image available!');
+                                  }
+                                },
+                                icon: const Icon(
+                                  Icons.image,
+                                ),
                               ),
                             ),
                             DataCell(

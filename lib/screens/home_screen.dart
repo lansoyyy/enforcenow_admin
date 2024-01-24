@@ -268,6 +268,8 @@ class HomeScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFieldWidget(
+                isObscure: true,
+                isPassword: true,
                 textcolor: Colors.black,
                 label: 'Password',
                 controller: passwordController,

@@ -51,6 +51,9 @@ class ViolationsPage extends StatelessWidget {
                           text: 'ID', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
+                          text: 'Image', fontSize: 18, color: Colors.black)),
+                  DataColumn(
+                      label: TextBold(
                           text: 'Name', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
@@ -75,6 +78,27 @@ class ViolationsPage extends StatelessWidget {
                           text: '${i + 1}',
                           fontSize: 14,
                           color: Colors.black,
+                        ),
+                      ),
+                      DataCell(
+                        IconButton(
+                          onPressed: () {
+                            if (data.docs[i]['img'] != '') {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Image.network(data.docs[i]['img']),
+                                  );
+                                },
+                              );
+                            } else {
+                              showToast('No image available!');
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.image,
+                          ),
                         ),
                       ),
                       DataCell(
