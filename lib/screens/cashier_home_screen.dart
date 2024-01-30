@@ -183,11 +183,6 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                           color: Colors.black)),
                                   DataColumn(
                                       label: TextBold(
-                                          text: 'Is Paid',
-                                          fontSize: 18,
-                                          color: Colors.black)),
-                                  DataColumn(
-                                      label: TextBold(
                                           text: 'Date and Time',
                                           fontSize: 18,
                                           color: Colors.black)),
@@ -230,14 +225,6 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                       DataCell(
                                         TextRegular(
                                           text: data.docs[i]['license'],
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      DataCell(
-                                        TextRegular(
-                                          text:
-                                              data.docs[i]['isPaid'].toString(),
                                           fontSize: 14,
                                           color: Colors.black,
                                         ),

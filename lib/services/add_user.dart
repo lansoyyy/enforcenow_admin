@@ -12,6 +12,7 @@ Future addUser(type, name, number, address, email, id) async {
     'status': 'Pending',
     'dateTime': DateTime.now(),
     'userId': id,
+    'profile': 'https://cdn-icons-png.flaticon.com/256/149/149071.png',
   };
 
   await docUser.set(json);
