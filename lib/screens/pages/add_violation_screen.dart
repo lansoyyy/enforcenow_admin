@@ -74,7 +74,7 @@ class _AddViolationScreenState extends State<AddViolationScreen> {
             );
           }),
       drawer: DrawerWidget(
-        incashier: true,
+        incashier: false,
       ),
       appBar: AppBar(
         title:
