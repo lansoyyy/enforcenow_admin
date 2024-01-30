@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
@@ -15,6 +16,8 @@ class UserManagementPage extends StatefulWidget {
 class _UserManagementPageState extends State<UserManagementPage> {
   final searchController = TextEditingController();
   String nameSearched = '';
+
+  final typeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,10 +166,77 @@ class _UserManagementPageState extends State<UserManagementPage> {
                               ),
                             ),
                             DataCell(
-                              TextRegular(
-                                text: data.docs[i]['type'],
-                                fontSize: 14,
-                                color: Colors.black,
+                              SizedBox(
+                                width: 150,
+                                child: Row(
+                                  children: [
+                                    TextRegular(
+                                      text: data.docs[i]['type'],
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        typeController.text =
+                                            data.docs[i]['type'];
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: TextBold(
+                                                text: 'Role Management',
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                              content: SizedBox(
+                                                height: 150,
+                                                child: TextFieldWidget(
+                                                    textcolor: Colors.black,
+                                                    label: 'Position/Role',
+                                                    controller: typeController),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: TextBold(
+                                                    text: 'Close',
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Users')
+                                                        .doc(data.docs[i].id)
+                                                        .update({
+                                                      'type':
+                                                          typeController.text
+                                                    });
+                                                    showToast(
+                                                        'Role updated succesfully!');
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: TextBold(
+                                                    text: 'Save',
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.edit,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             DataCell(IconButton(
