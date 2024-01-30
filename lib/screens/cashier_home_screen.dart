@@ -18,6 +18,9 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
   final searchController = TextEditingController();
 
   final paymentController = TextEditingController();
+
+  bool gcashSelected = false;
+  bool paymayaSelected = true;
   String nameSearched = '';
   @override
   Widget build(BuildContext context) {
@@ -99,7 +102,7 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                     });
                   },
                   decoration: const InputDecoration(
-                      hintText: 'Search User',
+                      hintText: "Search violator's name",
                       hintStyle: TextStyle(fontFamily: 'QRegular'),
                       prefixIcon: Icon(
                         Icons.search,
@@ -330,16 +333,113 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                             await FirebaseFirestore.instance
                                                 .collection('Records')
                                                 .doc(data.docs[i].id)
-                                                .update({'isPaid': false});
+                                                .update({
+                                              'isPaid': false,
+                                              'status': 'Unpaid'
+                                            });
                                           } else {
-                                            await FirebaseFirestore.instance
-                                                .collection('Records')
-                                                .doc(data.docs[i].id)
-                                                .update({'isPaid': true});
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: TextBold(
+                                                    text: 'Paid through',
+                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                  ),
+                                                  content: StatefulBuilder(
+                                                      builder:
+                                                          (context, setState) {
+                                                    return Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        CheckboxListTile(
+                                                          title: const Text(
+                                                              'Cash'),
+                                                          value:
+                                                              paymayaSelected,
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              paymayaSelected =
+                                                                  value!;
+                                                              if (value) {
+                                                                gcashSelected =
+                                                                    false;
+                                                              }
+                                                            });
+                                                          },
+                                                        ),
+                                                        CheckboxListTile(
+                                                          title: const Text(
+                                                              'GCash'),
+                                                          value: gcashSelected,
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              gcashSelected =
+                                                                  value!;
+
+                                                              if (value) {
+                                                                paymayaSelected =
+                                                                    false;
+                                                              }
+                                                            });
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: TextBold(
+                                                        text: 'Close',
+                                                        fontSize: 12,
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        if (paymayaSelected ||
+                                                            gcashSelected) {
+                                                          Navigator.pop(
+                                                              context);
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'Records')
+                                                              .doc(data
+                                                                  .docs[i].id)
+                                                              .update({
+                                                            'isPaid': true,
+                                                            'status': 'Paid'
+                                                          });
+                                                        } else {
+                                                          showToast(
+                                                              'Cannot proceed! Input payment method!');
+                                                        }
+                                                      },
+                                                      child: TextBold(
+                                                        text: 'Save',
+                                                        fontSize: 14,
+                                                        color: Colors.blue,
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            );
                                           }
                                         },
-                                        icon: const Icon(
-                                          Icons.check_box_outline_blank,
+                                        icon: Icon(
+                                          data.docs[i]['isPaid']
+                                              ? Icons.check_box
+                                              : Icons.check_box_outline_blank,
                                           color: Colors.blue,
                                         ),
                                       )),
