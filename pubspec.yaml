@@ -46,6 +46,8 @@ dependencies:
   open_file:
   printing: ^5.9.3
   permission_handler:
+  custom_date_range_picker:
+  flutter_date_range_picker:
 
 dev_dependencies:
   flutter_test:

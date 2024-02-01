@@ -6,15 +6,16 @@ import 'package:intl/intl.dart';
 import '../../widgets/drawer_widget.dart';
 import '../../widgets/text_widget.dart';
 
-class ViolationsPage extends StatelessWidget {
-  const ViolationsPage({super.key});
+class NoCredentialsPage extends StatelessWidget {
+  const NoCredentialsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DrawerWidget(),
       appBar: AppBar(
-        title: TextBold(text: 'VIOLATIONS', fontSize: 18, color: Colors.white),
+        title:
+            TextBold(text: 'NO CREDENTIALS', fontSize: 18, color: Colors.white),
         centerTitle: true,
         actions: [
           Padding(
@@ -27,7 +28,7 @@ class ViolationsPage extends StatelessWidget {
         child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('Records')
-                .where('type', isNotEqualTo: 'No credentials')
+                .where('type', isEqualTo: 'No credentials')
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -56,13 +57,12 @@ class ViolationsPage extends StatelessWidget {
                           text: 'Image', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
-                          text: 'Name', fontSize: 18, color: Colors.black)),
+                          text: 'Comment', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
-                          text: 'License', fontSize: 18, color: Colors.black)),
-                  DataColumn(
-                      label: TextBold(
-                          text: 'Status', fontSize: 18, color: Colors.black)),
+                          text: 'Place of Violation',
+                          fontSize: 18,
+                          color: Colors.black)),
                   DataColumn(
                       label: TextBold(
                           text: 'Date and Time',
@@ -105,23 +105,14 @@ class ViolationsPage extends StatelessWidget {
                       ),
                       DataCell(
                         TextRegular(
-                          text: data.docs[i]['fname'] +
-                              ' ' +
-                              data.docs[i]['lname'],
+                          text: data.docs[i]['desc'],
                           fontSize: 14,
                           color: Colors.black,
                         ),
                       ),
                       DataCell(
                         TextRegular(
-                          text: data.docs[i]['license'],
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
-                      ),
-                      DataCell(
-                        TextRegular(
-                          text: data.docs[i]['status'],
+                          text: data.docs[i]['place'],
                           fontSize: 14,
                           color: Colors.black,
                         ),

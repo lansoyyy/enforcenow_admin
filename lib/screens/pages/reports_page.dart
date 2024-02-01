@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../widgets/drawer_widget.dart';
@@ -21,14 +22,19 @@ class ReportsPage extends StatefulWidget {
 class _ReportsPageState extends State<ReportsPage> {
   final dateController = TextEditingController();
 
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Records')
-              .where('day', isEqualTo: dates.day)
-              .where('month', isEqualTo: dates.month)
+              .where('dateTime',
+                  isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+              .where('dateTime',
+                  isLessThanOrEqualTo: Timestamp.fromDate(endDate))
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -49,6 +55,7 @@ class _ReportsPageState extends State<ReportsPage> {
             final data = snapshot.requireData;
             return FloatingActionButton(
               onPressed: () {
+                print(data.docs[0]['dateTime']);
                 generatePdf(data.docs);
               },
               child: const Icon(Icons.download),
@@ -80,7 +87,7 @@ class _ReportsPageState extends State<ReportsPage> {
                   text: const TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Select a date',
+                        text: 'Select dates',
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: 'Bold',
@@ -105,7 +112,31 @@ class _ReportsPageState extends State<ReportsPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    dateFromPicker(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: SizedBox(
+                            height: 500,
+                            child: DateRangePickerWidget(
+                              onPeriodChanged: (value) {
+                                setState(() {
+                                  startDate = value.start;
+                                  endDate = value.end;
+
+                                  dateController.text =
+                                      '${DateFormat('dd/MM/yyyy').format(startDate)} to ${DateFormat('dd/MM/yyyy').format(endDate)}';
+                                });
+
+                                Navigator.pop(context);
+                              },
+                              initialPeriod: Period(startDate, endDate),
+                              maximumPeriodLength: 15,
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                   child: SizedBox(
                     width: 325,
@@ -178,8 +209,10 @@ class _ReportsPageState extends State<ReportsPage> {
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Records')
-                      .where('day', isEqualTo: dates.day)
-                      .where('month', isEqualTo: dates.month)
+                      .where('dateTime',
+                          isGreaterThanOrEqualTo: Timestamp.fromDate(startDate))
+                      .where('dateTime',
+                          isLessThanOrEqualTo: Timestamp.fromDate(endDate))
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
