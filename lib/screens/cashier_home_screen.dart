@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow_admin/screens/auth/cashier_login_screen.dart';
-import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -102,7 +101,7 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                     });
                   },
                   decoration: const InputDecoration(
-                      hintText: "Search violator's name",
+                      hintText: "Search violator's license",
                       hintStyle: TextStyle(fontFamily: 'QRegular'),
                       prefixIcon: Icon(
                         Icons.search,
@@ -138,10 +137,10 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                           stream: FirebaseFirestore.instance
                               .collection('Records')
                               .where('isPaid', isEqualTo: i == 0 ? true : false)
-                              .where('fname',
+                              .where('license',
                                   isGreaterThanOrEqualTo:
                                       toBeginningOfSentenceCase(nameSearched))
-                              .where('fname',
+                              .where('license',
                                   isLessThan:
                                       '${toBeginningOfSentenceCase(nameSearched)}z')
                               .snapshots(),
@@ -168,7 +167,7 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                 columns: [
                                   DataColumn(
                                       label: TextBold(
-                                          text: 'ID',
+                                          text: 'No.',
                                           fontSize: 18,
                                           color: Colors.black)),
                                   DataColumn(
@@ -179,6 +178,11 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                   DataColumn(
                                       label: TextBold(
                                           text: 'License',
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  DataColumn(
+                                      label: TextBold(
+                                          text: 'TVR',
                                           fontSize: 18,
                                           color: Colors.black)),
                                   DataColumn(
@@ -231,6 +235,13 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                       ),
                                       DataCell(
                                         TextRegular(
+                                          text: data.docs[i].id,
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        TextRegular(
                                           text: DateFormat.yMMMd()
                                               .add_jm()
                                               .format(data.docs[i]['dateTime']
@@ -248,69 +259,69 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                               fontSize: 14,
                                               color: Colors.black,
                                             ),
-                                            IconButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      title: TextBold(
-                                                          text:
-                                                              'Updating Payment',
-                                                          fontSize: 18,
-                                                          color: Colors.blue),
-                                                      content: SizedBox(
-                                                        height: 100,
-                                                        child: TextFieldWidget(
-                                                            textcolor:
-                                                                Colors.black,
-                                                            label: 'Payment',
-                                                            controller:
-                                                                paymentController),
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: TextBold(
-                                                            text: 'Close',
-                                                            fontSize: 14,
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () async {
-                                                            await FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'Records')
-                                                                .doc(data
-                                                                    .docs[i].id)
-                                                                .update({
-                                                              'payment': int.parse(
-                                                                  paymentController
-                                                                      .text)
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: TextBold(
-                                                            text: 'Save',
-                                                            fontSize: 14,
-                                                            color: Colors.blue,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              icon: const Icon(
-                                                Icons.edit,
-                                              ),
-                                            ),
+                                            // IconButton(
+                                            //   onPressed: () {
+                                            //     showDialog(
+                                            //       context: context,
+                                            //       builder: (context) {
+                                            //         return AlertDialog(
+                                            //           title: TextBold(
+                                            //               text:
+                                            //                   'Updating Payment',
+                                            //               fontSize: 18,
+                                            //               color: Colors.blue),
+                                            //           content: SizedBox(
+                                            //             height: 100,
+                                            //             child: TextFieldWidget(
+                                            //                 textcolor:
+                                            //                     Colors.black,
+                                            //                 label: 'Payment',
+                                            //                 controller:
+                                            //                     paymentController),
+                                            //           ),
+                                            //           actions: [
+                                            //             TextButton(
+                                            //               onPressed: () {
+                                            //                 Navigator.pop(
+                                            //                     context);
+                                            //               },
+                                            //               child: TextBold(
+                                            //                 text: 'Close',
+                                            //                 fontSize: 14,
+                                            //                 color: Colors.grey,
+                                            //               ),
+                                            //             ),
+                                            //             TextButton(
+                                            //               onPressed: () async {
+                                            //                 await FirebaseFirestore
+                                            //                     .instance
+                                            //                     .collection(
+                                            //                         'Records')
+                                            //                     .doc(data
+                                            //                         .docs[i].id)
+                                            //                     .update({
+                                            //                   'payment': int.parse(
+                                            //                       paymentController
+                                            //                           .text)
+                                            //                 });
+                                            //                 Navigator.pop(
+                                            //                     context);
+                                            //               },
+                                            //               child: TextBold(
+                                            //                 text: 'Save',
+                                            //                 fontSize: 14,
+                                            //                 color: Colors.blue,
+                                            //               ),
+                                            //             ),
+                                            //           ],
+                                            //         );
+                                            //       },
+                                            //     );
+                                            //   },
+                                            //   icon: const Icon(
+                                            //     Icons.edit,
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                       ),
