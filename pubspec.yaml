@@ -48,6 +48,7 @@ dependencies:
   permission_handler:
   custom_date_range_picker:
   flutter_date_range_picker:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

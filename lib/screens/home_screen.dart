@@ -6,6 +6,7 @@ import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -177,30 +178,36 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(
                           width: 50,
                         ),
-                        Container(
-                          height: 175,
-                          width: 175,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.book,
-                                size: 100,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextBold(
-                                text: 'User Manual',
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ],
+                        GestureDetector(
+                          onTap: () async {
+                            await launchUrlString(
+                                'https://drive.google.com/drive/folders/1hX6xDTC3NmxHf1zfrbSxANE8BQ9Mzga8?usp=drive_link');
+                          },
+                          child: Container(
+                            height: 175,
+                            width: 175,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.book,
+                                  size: 100,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextBold(
+                                  text: 'User Manual',
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

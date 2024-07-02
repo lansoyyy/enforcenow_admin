@@ -62,6 +62,9 @@ class ViolationsPage extends StatelessWidget {
                           text: 'License', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
+                          text: 'Payment', fontSize: 18, color: Colors.black)),
+                  DataColumn(
+                      label: TextBold(
                           text: 'Status', fontSize: 18, color: Colors.black)),
                   DataColumn(
                       label: TextBold(
@@ -115,6 +118,13 @@ class ViolationsPage extends StatelessWidget {
                       DataCell(
                         TextRegular(
                           text: data.docs[i]['license'],
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      DataCell(
+                        TextRegular(
+                          text: data.docs[i]['payment'],
                           fontSize: 14,
                           color: Colors.black,
                         ),

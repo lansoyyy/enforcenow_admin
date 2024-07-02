@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enforcenow_admin/screens/auth/cashier_login_screen.dart';
+import 'package:enforcenow_admin/widgets/textfield_widget.dart';
 import 'package:enforcenow_admin/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,8 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
   bool gcashSelected = false;
   bool paymayaSelected = true;
   String nameSearched = '';
+
+  final refno = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -182,7 +185,7 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                           color: Colors.black)),
                                   DataColumn(
                                       label: TextBold(
-                                          text: 'TVR',
+                                          text: 'Mode of Payment',
                                           fontSize: 18,
                                           color: Colors.black)),
                                   DataColumn(
@@ -235,7 +238,10 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                       ),
                                       DataCell(
                                         TextRegular(
-                                          text: data.docs[i].id,
+                                          text: data.docs[i]['paymentType'] ==
+                                                  'GCash'
+                                              ? '${data.docs[i]['paymentType']} (${data.docs[i]['refno']})'
+                                              : '${data.docs[i]['paymentType']}',
                                           fontSize: 14,
                                           color: Colors.black,
                                         ),
@@ -387,6 +393,17 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                                             });
                                                           },
                                                         ),
+                                                        Visibility(
+                                                            visible:
+                                                                gcashSelected,
+                                                            child:
+                                                                TextFieldWidget(
+                                                              textcolor:
+                                                                  Colors.black,
+                                                              label:
+                                                                  'GCash Reference Number',
+                                                              controller: refno,
+                                                            )),
                                                       ],
                                                     );
                                                   }),
@@ -405,18 +422,43 @@ class _CashierHomeScreenState extends State<CashierHomeScreen> {
                                                       onPressed: () async {
                                                         if (paymayaSelected ||
                                                             gcashSelected) {
-                                                          Navigator.pop(
-                                                              context);
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'Records')
-                                                              .doc(data
-                                                                  .docs[i].id)
-                                                              .update({
-                                                            'isPaid': true,
-                                                            'status': 'Paid'
-                                                          });
+                                                          if (gcashSelected) {
+                                                            Navigator.pop(
+                                                                context);
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'Records')
+                                                                .doc(data
+                                                                    .docs[i].id)
+                                                                .update({
+                                                              'isPaid': true,
+                                                              'status': 'Paid',
+                                                              'refno':
+                                                                  refno.text,
+                                                              'paymentType':
+                                                                  gcashSelected
+                                                                      ? 'GCash'
+                                                                      : 'Cash'
+                                                            });
+                                                          } else {
+                                                            Navigator.pop(
+                                                                context);
+                                                            await FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'Records')
+                                                                .doc(data
+                                                                    .docs[i].id)
+                                                                .update({
+                                                              'isPaid': true,
+                                                              'status': 'Paid',
+                                                              'paymentType':
+                                                                  gcashSelected
+                                                                      ? 'GCash'
+                                                                      : 'Cash'
+                                                            });
+                                                          }
                                                         } else {
                                                           showToast(
                                                               'Cannot proceed! Input payment method!');
